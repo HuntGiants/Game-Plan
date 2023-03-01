@@ -1,0 +1,22 @@
+class Enemy:
+        def __init__  (self, name, health, speed, damage):
+                self.name = name
+                self.health = health
+                self.speed  = speed
+                self.damage = damage
+        
+        def __str__(self):
+                return f"{self.name} has {self.health}"
+        
+        def speak(self,sound):
+                return (f'{self.name} says {sound}')
+        
+        def dmg(self,health):
+                self.health -= (5)
+                
+        
+            
+bg_1 = Enemy("Sylph", 150, 35, 3)
+bg_1.speak("Augh!")
+
+bg_2 = Enemy("Treant", 250, 10, 3)
