@@ -1,33 +1,40 @@
 import pygame, sys
 import math
 
+#resource:  https://stackoverflow.com/questions/56709206/how-do-i-make-my-playership-rotate-when-i-press-the-right-or-left-keys
 
 #Class Definitions
 class Ship(pygame.sprite.Sprite):
-  def __init__(self,groups):
+  def __init__(self,groups, x, y):
     super().__init__(groups)
-    self.image = pygame.image.load("Sprites/player.png").convert_alpha()
-    self.rect = self.image.get_rect(center =(SCREEN_W/2,SCREEN_H/2))
+    pygame.sprite.Sprite.__init__(self)
+    self.player_img = pygame.image.load("Sprites/player.png").convert_alpha()
+    self.image = self.player_img
+    self.rect = self.image.get_rect()
+    self.rect.move_ip(x, y)
+    self.current_direction = 0 #0 degree == up
+    self.speed = 10
 
   def movement(self):
-    current_keys = pygame.key.get_pressed()
-    if current_keys[pygame.K_w]:
-      #Remove pass statement and move ship forward!
-      self.rect.y += -1
-    
-    if current_keys[pygame.K_s]:
-      #Remove pass statement and move ship forward!
-      self.rect.y += 1
-      
-    #Repeat this process for left/A and right/D - Rotozoom
-    if current_keys[pygame.K_a]:
-      #Remove pass statement and move ship forward!
-      self.rect.x += -1
-    
-    if current_keys[pygame.K_d]:
-      #Remove pass statement and move ship forward!
-      self.rect.x += 1
-      
+        self.speedx = 0
+        keystate = pygame.key.get_pressed()
+        prev_center = self.rect.center
+        if keystate[pygame.K_LEFT]:
+            self.current_direction += 10
+        if keystate[pygame.K_RIGHT]:
+            self.current_direction -= 10
+        if keystate[pygame.K_DOWN]:
+            self.rect.x += self.speed * math.sin(math.radians(self.current_direction))
+            self.rect.y += self.speed * math.cos(math.radians(self.current_direction))
+        if keystate[pygame.K_UP]:
+            self.rect.x -= self.speed * math.sin(math.radians(self.current_direction))
+            self.rect.y -= self.speed * math.cos(math.radians(self.current_direction))
+
+        if keystate[pygame.K_LEFT] or keystate[pygame.K_RIGHT]:
+            self.image = pygame.transform.rotate(self.player_img, self.current_direction)
+            self.rect = self.image.get_rect()
+            self.rect.center = prev_center
+          
   def update(self):
     self.movement()
     
@@ -46,7 +53,7 @@ background = pygame.image.load("Sprites/background.png").convert()
 
 #Game Sprites
 spaceship_group = pygame.sprite.GroupSingle()
-ship = Ship(spaceship_group)
+ship = Ship(spaceship_group, 50, 50)
 
 #Main Game Loop
 while True:
@@ -54,7 +61,7 @@ while True:
     if event.type == pygame.QUIT:
       pygame.quit()
       sys.exit()
-    
+  clock.tick(40)  
   #Primary Background
   display_surface.blit(background,(0,0))
 
