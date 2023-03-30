@@ -1,0 +1,40 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class mover : MonoBehaviour
+{
+
+    //[SerializeField] float xValue = 0.1f;
+    //[SerializeField] float yValue = 0.0f;
+    //[SerializeField] float zValue = 0.0f;
+    [SerializeField] float speed = 100f;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        
+    }
+    public float delay = 3;
+    float timer;
+
+    // Update is called once per frameS
+    void Update()
+    {
+        float xValue = Input.GetAxis("Horizontal") * speed * Time.deltaTime;
+        float yValue = Input.GetAxis("Vertical") * speed * Time.deltaTime;
+
+        transform.Translate(xValue, 0, yValue);
+
+        timer += Time.deltaTime;
+        if (timer > delay)
+        {
+            Jumpcube();
+            enabled = false;
+        }
+    }
+    void Jumpcube()
+    {
+        // Do something!
+    }
+}
