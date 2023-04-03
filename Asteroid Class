@@ -1,0 +1,4 @@
+class Asteroid(pygame.sprite.Sprite):
+  def __init__(self, position, direction, groups):
+    super().__init__(groups)
+    
